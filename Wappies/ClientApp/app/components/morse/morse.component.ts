@@ -11,6 +11,7 @@ export class MorseComponent {
     private DOT: string = '.';
     private CHAR_BREAK: string = ' ';
     private WORD_BREAK: string = '/';
+    private ITS_GO_TIME_WORD: string = 'SOS';
 
     private CLEAR_TIME: number = 5000;
     private SPACE_TIME: number = 500;
@@ -52,11 +53,19 @@ export class MorseComponent {
         this.spaceTimeoutID = setTimeout(() => {
             this.morseText = this.morseText + this.CHAR_BREAK;
             this.translatedText = this.morse.decode(this.morseText);
+            if (this.translatedText.trim().slice(-this.ITS_GO_TIME_WORD.length).toUpperCase() === this.ITS_GO_TIME_WORD.toUpperCase()) {
+                this.beginTransmission();
+            }
         }, this.SPACE_TIME);
 
         this.clearTimeoutID = setTimeout(() => {
             this.morseText = '';
             this.translatedText = '';
         }, this.CLEAR_TIME)
+    }
+
+    public beginTransmission() {
+        //TODO: This
+        console.log('%cLET\'S GO', 'color: red; font-size: 72pt;');
     }
 }
