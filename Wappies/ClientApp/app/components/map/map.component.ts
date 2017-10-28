@@ -3,7 +3,8 @@ import * as mapboxgl from 'mapbox-gl';
 
 @Component({
     selector: 'map',
-    templateUrl: './map.component.html'
+    templateUrl: './map.component.html',
+    styleUrls: ['./map.component.css']
 })
 export class MapComponent implements OnInit {
     private style: string = 'mapbox://styles/mapbox/streets-v9';
@@ -19,8 +20,8 @@ export class MapComponent implements OnInit {
         this.map = new mapboxgl.Map({
             container: 'mapbox-map',
             style: this.style,
-            zoom: 13,
-            centre: [this.lng, this.lat]
+            zoom: 5,
+            center: [this.lng, this.lat]
         });
     }
 }
