@@ -12,6 +12,7 @@ import { CounterComponent } from './components/counter/counter.component';
 import { MapComponent } from './components/map/map.component';
 import { MorseComponent } from './components/morse/morse.component';
 import { TestLocationComponent } from './components/testLocation/testLocation.component';
+import { TwoDigitsPipe } from './pipes/two-digits.pipe';
 
 @NgModule({
     declarations: [
@@ -22,7 +23,8 @@ import { TestLocationComponent } from './components/testLocation/testLocation.co
         HomeComponent,
         MapComponent,
         MorseComponent,
-        TestLocationComponent
+        TestLocationComponent,
+        TwoDigitsPipe
     ],
     imports: [
         CommonModule,

@@ -1,6 +1,7 @@
 #morse-detector {
     width: 1000px;
     height: 1000px;
+    text-align: center;
     background-color: red;
 }
 
@@ -12,16 +13,16 @@
 }
 
 #clock-hours {
-    width: 100px;
+    width: 140px;
     text-align: right;
 }
 
 #clock-colon {
-    width: 30px;
+    width: 20px;
     text-align: center;
 }
 
 #clock-minutes {
-    width: 100px;
+    width: 140px;
     text-align: left;
 }
