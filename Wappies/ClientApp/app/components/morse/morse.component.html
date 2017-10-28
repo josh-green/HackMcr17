@@ -1,4 +1,7 @@
-<div (mousedown)="startMorse()" (mouseup)="endMorse()" clickable>
-    <h2>{{ morseText }}</h2>
-    <h2>{{ translatedText }}</h2>
+<div id='morse-detector' (mousedown)="startMorse()" (mouseup)="endMorse()" clickable>
+    <div id='clock-hours' class='clock-part'>{{ hours }}</div>
+    <div id='clock-colon' class='clock-part'><span [class.hidden]='!showColon'>:</span></div>
+    <div id='clock-minutes' class='clock-part'>{{ minutes }}</div>
 </div>
+<h2>{{ morseText }}</h2>
+<h2>{{ translatedText }}</h2>

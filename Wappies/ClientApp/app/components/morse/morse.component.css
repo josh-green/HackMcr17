@@ -1,5 +1,27 @@
-div {
+#morse-detector {
     width: 1000px;
     height: 1000px;
     background-color: red;
+}
+
+.clock-part {
+    font-family: 'Saira Semi Condensed', sans-serif;
+    font-weight: bold;
+    font-size: 72pt;
+    display: inline-block;
+}
+
+#clock-hours {
+    width: 100px;
+    text-align: right;
+}
+
+#clock-colon {
+    width: 30px;
+    text-align: center;
+}
+
+#clock-minutes {
+    width: 100px;
+    text-align: left;
 }
