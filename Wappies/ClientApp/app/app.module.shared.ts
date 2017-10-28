@@ -19,7 +19,8 @@ import { MorseComponent } from './components/morse/morse.component';
         CounterComponent,
         FetchDataComponent,
         HomeComponent,
-        MapComponent
+        MapComponent,
+        MorseComponent
     ],
     imports: [
         CommonModule,

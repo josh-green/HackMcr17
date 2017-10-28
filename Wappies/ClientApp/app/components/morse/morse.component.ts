@@ -20,9 +20,11 @@ export class MorseComponent {
     public morseText: string = '';
     
     public startMorse() {
-        let timeSinceLast: number = this.morseStartTime - this.morseEndTime;
+        let timeSinceLast: number;
 
         this.morseStartTime = Date.now();
+
+        timeSinceLast = this.morseStartTime - this.morseEndTime;
 
         if (timeSinceLast > this.CLEAR_TIME) {
             this.morseText = '';
@@ -32,14 +34,16 @@ export class MorseComponent {
     }
 
     public endMorse() {
-        let length: number = this.morseEndTime - this.morseStartTime;
+        let length: number;
 
-        this.morseEndTime = Date.now()
+        this.morseEndTime = Date.now();
+
+        length = this.morseEndTime - this.morseStartTime;
 
         if (length > this.DOT_DASH_BREAKPOINT) {
             this.morseText = this.morseText + this.DASH;
         } else {
-            this.morseText = this.morseText + this.DASH;
+            this.morseText = this.morseText + this.DOT;
         }
     }
 }
