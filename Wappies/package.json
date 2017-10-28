@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "build": "npm i && webpack && webpack --config webpack.config.vendor.js",
+    "build": "npm i && \"./node_modules/.bin/webpack\" && \"./node_modules/.bin/webpack\" --config webpack.config.vendor.js",
     "test": "karma start ClientApp/test/karma.conf.js"
   },
   "dependencies": {
@@ -38,10 +38,12 @@
     "json-loader": "0.5.4",
     "mapbox-gl": "^0.41.0",
     "morse-node": "^0.1.1",
+    "node-sass": "^4.5.3",
     "preboot": "4.5.2",
     "raw-loader": "0.5.1",
     "reflect-metadata": "0.1.10",
     "rxjs": "5.4.2",
+    "sass-loader": "^6.0.6",
     "style-loader": "0.18.2",
     "to-string-loader": "1.1.5",
     "typescript": "2.4.1",
