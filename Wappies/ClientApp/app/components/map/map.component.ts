@@ -5,7 +5,7 @@ import { mapboxgl } from 'mapbox-gl';
     selector: 'map',
     templateUrl: './map.component.html'
 })
-export class HomeComponent {
+export class MapComponent {
     public static map: any; 
 
     constructor() {
