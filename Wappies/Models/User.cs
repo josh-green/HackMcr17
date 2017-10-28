@@ -8,9 +8,9 @@ namespace Wappies.Models
 {
     public class User
     {
-        private int ID;
+        int ID;
 
         [DataType(DataType.PhoneNumber)]
-        private String PhoneNumber;
+        String PhoneNumber;
     }
 }
