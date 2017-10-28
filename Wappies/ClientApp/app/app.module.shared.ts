@@ -17,7 +17,8 @@ import { MapComponent } from './components/map/map.component';
         NavMenuComponent,
         CounterComponent,
         FetchDataComponent,
-        HomeComponent
+        HomeComponent,
+        MapComponent
     ],
     imports: [
         CommonModule,
