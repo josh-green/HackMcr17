@@ -30,6 +30,22 @@ namespace Wappies.Controllers
             }
         }
 
+        public JsonResult ReportLocations(int ReportID)
+        {
+            using (DatabaseContext db = new DatabaseContext())
+            {
+                List<GeoJson> Result = new List<GeoJson>();
+                Report Report = db.Reports.Where(r => r.ID == ReportID).SingleOrDefault();
+
+                foreach (Location location in Report.LocationList)
+                {
+                    GeoJson geo = new GeoJson(location.Latitude, location.Longitude, location.DateTime.ToLongDateString());
+                    Result.Add(geo);
+                }
+                return Json(JsonConvert.SerializeObject(Result));
+            }
+        }
+
         public JsonResult SetCompleted(int ReportID) {
             using (DatabaseContext db = new DatabaseContext()) {
                 Report report = db.Reports.Where(r => r.ID == ReportID).SingleOrDefault() ?? throw new RestException();
