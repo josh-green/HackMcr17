@@ -19,10 +19,10 @@ namespace Wappies.Models
         public bool Completed { get; set; }
 
         [ForeignKey("User")]
-        public int UserID;
+        public int UserID { get; set; }
 
-        public User User;
+        public User User { get; set; }
 
-        public List<Location> LocationList;
+        public List<Location> LocationList { get; set; }
     }
 }
