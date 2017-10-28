@@ -11,17 +11,17 @@ namespace Wappies.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        int ID;
+        public int ID;
 
         [DataType(DataType.EmailAddress)]
-        String Username;
+        public String Username;
 
         [DataType(DataType.Password)]
-        String Password;
+        public String Password;
 
-        String Name;
+        public String Name;
 
         [DataType(DataType.DateTime)]
-        DateTime LastLogin;
+        public DateTime LastLogin;
     }
 }

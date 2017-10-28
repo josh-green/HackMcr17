@@ -11,18 +11,18 @@ namespace Wappies.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        int ID;
+        public int ID { get; set; }
 
         [DataType(DataType.DateTime)]
-        DateTime Created;
+        public DateTime Created { get; set; }
 
-        bool Completed;
+        public bool Completed { get; set; }
 
         [ForeignKey("User")]
-        int UserID;
+        public int UserID { get; set; }
 
-        User User;
+        public User User { get; set; }
 
-        List<Location> LocationList;
+        public List<Location> LocationList { get; set; }
     }
 }
