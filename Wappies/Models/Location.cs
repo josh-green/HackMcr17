@@ -11,16 +11,16 @@ namespace Wappies.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        int ID;
+        public int ID;
 
         [ForeignKey("Report")]
-        int ReportID;
+        public int ReportID;
 
         [DataType(DataType.DateTime)]
-        DateTime DateTime;
+        public DateTime DateTime;
 
-        String Longitude;
+        public String Longitude;
 
-        String Latitude;
+        public String Latitude;
     }
 }

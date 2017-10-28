@@ -7,7 +7,7 @@ using Wappies.Models;
 
 namespace Wappies.Context
 {
-    public class Database : DbContext
+    public class DatabaseContext : DbContext
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Administrator> Administrators { get; set; }

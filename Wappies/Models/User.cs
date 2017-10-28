@@ -11,9 +11,9 @@ namespace Wappies.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        int ID { get; }
+        public int ID { get; }
 
         [DataType(DataType.PhoneNumber)]
-        String PhoneNumber { get; set; }
+        public String PhoneNumber { get; set; }
     }
 }
