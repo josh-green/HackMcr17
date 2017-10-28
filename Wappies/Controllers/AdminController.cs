@@ -18,7 +18,7 @@ namespace Wappies.Controllers
     {
         public JsonResult ActiveReports() {
             using (DatabaseContext db = new DatabaseContext()) {
-                List<GeoJson> Result = new List<GeoJson>;
+                List<GeoJson> Result = new List<GeoJson>();
                 List<Report> Reports = db.Reports.Where(r => r.Completed != true).ToList();
 
                 foreach (Report rep in Reports) {
