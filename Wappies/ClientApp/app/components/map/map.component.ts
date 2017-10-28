@@ -10,7 +10,7 @@ export class MapComponent {
 
     constructor() {
         mapboxgl.accessToken = 'pk.eyJ1IjoiYnJ1ZGRsZXMiLCJhIjoiY2lmOXA1M2hoMDAyaHVja25pYjBnbXl0aCJ9.CT8iLt0HbViwX6ktZhpIzQ';
-        HomeComponent.map = new mapboxgl.Map({
+        MapComponent.map = new mapboxgl.Map({
             container: 'mapbox-map',
             style: 'mapbox://styles/mapbox/streets-v9'
         });
