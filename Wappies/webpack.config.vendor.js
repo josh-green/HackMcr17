@@ -21,7 +21,8 @@ const nonTreeShakableModules = [
     'es6-shim',
     'event-source-polyfill',
     'jquery',
-    'mapbox-gl'
+    'mapbox-gl',
+    'morse-node'
 ];
 const allModules = treeShakableModules.concat(nonTreeShakableModules);
 
