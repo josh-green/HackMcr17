@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import * as MorseNode from 'morse-node';
 
 @Component({
     selector: 'morse',
@@ -17,20 +18,22 @@ export class MorseComponent {
 
     private morseStartTime: number = 0;
     private morseEndTime: number = 0;
-    public morseText: string = '';
+
+    private morse: any = MorseNode.create();
+
+    private spaceTimeoutID: number;
+    private clearTimeoutID: number;
     
+    public morseText: string = '';
+    public translatedText: string = '';
+
     public startMorse() {
         let timeSinceLast: number;
 
         this.morseStartTime = Date.now();
 
-        timeSinceLast = this.morseStartTime - this.morseEndTime;
-
-        if (timeSinceLast > this.CLEAR_TIME) {
-            this.morseText = '';
-        } else if (timeSinceLast > this.SPACE_TIME) {
-            this.morseText = this.morseText + this.CHAR_BREAK;
-        }
+        clearTimeout(this.spaceTimeoutID);
+        clearTimeout(this.clearTimeoutID);
     }
 
     public endMorse() {
@@ -45,5 +48,15 @@ export class MorseComponent {
         } else {
             this.morseText = this.morseText + this.DOT;
         }
+
+        this.spaceTimeoutID = setTimeout(() => {
+            this.morseText = this.morseText + this.CHAR_BREAK;
+            this.translatedText = this.morse.decode(this.morseText);
+        }, this.SPACE_TIME);
+
+        this.clearTimeoutID = setTimeout(() => {
+            this.morseText = '';
+            this.translatedText = '';
+        }, this.CLEAR_TIME)
     }
 }
