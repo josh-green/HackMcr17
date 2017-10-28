@@ -1,1 +1,8 @@
 ﻿<div>testLocation Component</div>
+
+<button (click)="getLocation()">Get Location</button>
+
+<h2>Locations: </h2>
+<ul>
+    <li *ngFor="let location of locations">{{ location }}</li>
+</ul>
