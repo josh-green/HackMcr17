@@ -10,6 +10,7 @@ import { HomeComponent } from './components/home/home.component';
 import { FetchDataComponent } from './components/fetchdata/fetchdata.component';
 import { CounterComponent } from './components/counter/counter.component';
 import { MapComponent } from './components/map/map.component';
+import { MorseComponent } from './components/morse/morse.component';
 
 @NgModule({
     declarations: [
@@ -29,6 +30,7 @@ import { MapComponent } from './components/map/map.component';
             { path: 'counter', component: CounterComponent },
             { path: 'fetch-data', component: FetchDataComponent },
             { path: 'map', component: MapComponent },
+            { path: 'morse', component: MorseComponent },
             { path: '**', redirectTo: 'home' }
         ])
     ]
