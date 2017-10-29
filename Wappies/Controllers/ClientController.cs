@@ -15,24 +15,30 @@ namespace Wappies.Controllers
     [Route("api/Client")]
     public class ClientController : Controller
     {
+        private readonly DatabaseContext _context;
+
+        public ClientController(DatabaseContext context)
+        {
+            _context = context;
+        }
+
         public JsonResult CreateReport(string PhoneNumber, string Longitude, string Latitude) {
             Report report = new Report();
             Location location = new Location();
             ReportResult result;
+            
+            report.Created = DateTime.Now;
+            _context.Reports.Add(report);
 
-            using (DatabaseContext db = new DatabaseContext()) {
-                report.Created = DateTime.Now;
-                db.Reports.Add(report);
-                db.SaveChanges();
+            location.ReportID = report.ID;
+            location.Longitude = Longitude;
+            location.Latitude = Latitude;
+            _context.Locations.Add(location);
 
-                location.ReportID = report.ID;
-                location.Longitude = Longitude;
-                location.Latitude = Latitude;
-                db.Locations.Add(location);
-                db.SaveChanges();
+            _context.SaveChanges();
 
-                result = new ReportResult(200, "Success", report.ID);
-            }
+            result = new ReportResult(200, "Success", report.ID);
+            
             return Json(JsonConvert.SerializeObject(result));
         }
 

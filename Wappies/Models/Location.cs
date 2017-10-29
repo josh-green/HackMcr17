@@ -9,9 +9,7 @@ namespace Wappies.Models
 {
     public class Location
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int ID;
+        public int ID { get; set; }
 
         [ForeignKey("Report")]
         public int ReportID;

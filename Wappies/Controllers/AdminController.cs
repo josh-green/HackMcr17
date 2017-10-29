@@ -13,51 +13,49 @@ using Wappies.Utility;
 namespace Wappies.Controllers
 {
     [Produces("application/json")]
-    [Route("api/Admin")]
+    [Route("api/[controller]")]
     public class AdminController : Controller
     {
-        [HttpGet]
-        [ActionName("ActiveReports")]
-        public JsonResult ActiveReports() {
-            using (DatabaseContext db = new DatabaseContext()) {
-                List<GeoJson> Result = new List<GeoJson>();
-                List<Report> Reports = db.Reports.Where(r => r.Completed != true).ToList();
+        private readonly DatabaseContext _context;
 
-                foreach (Report rep in Reports) {
-                    Location location = rep.LocationList.OrderByDescending(l => l.DateTime).SingleOrDefault();
-                    GeoJson geo = new GeoJson(location.Latitude, location.Longitude, location.DateTime.ToLongDateString());
-                    Result.Add(geo);
-                }
-                return Json(JsonConvert.SerializeObject(Result));
-            }
+        public AdminController(DatabaseContext context)
+        {
+            _context = context;
         }
 
-        [HttpGet]
-        [ActionName("ReportLocations")]
+        [HttpGet("[action]")]
+        public JsonResult ActiveReports() {
+            List<GeoJson> Result = new List<GeoJson>();
+            List<Report> Reports = _context.Reports.Where(r => r.Completed != true).ToList();
+
+            foreach (Report rep in Reports) {
+                Location location = rep.LocationList.OrderByDescending(l => l.DateTime).SingleOrDefault();
+                GeoJson geo = new GeoJson(location.Latitude, location.Longitude, location.DateTime.ToLongDateString());
+                Result.Add(geo);
+            }
+            return Json(JsonConvert.SerializeObject(Result));
+            
+        }
+
+        [HttpGet("[action]")]
         public JsonResult ReportLocations(int ReportID)
         {
-            using (DatabaseContext db = new DatabaseContext())
-            {
-                List<GeoJson> Result = new List<GeoJson>();
-                Report Report = db.Reports.Where(r => r.ID == ReportID).SingleOrDefault();
+            List<GeoJson> Result = new List<GeoJson>();
+            Report Report = _context.Reports.Where(r => r.ID == ReportID).SingleOrDefault();
 
-                foreach (Location location in Report.LocationList)
-                {
-                    GeoJson geo = new GeoJson(location.Latitude, location.Longitude, location.DateTime.ToLongDateString());
-                    Result.Add(geo);
-                }
-                return Json(JsonConvert.SerializeObject(Result));
+            foreach (Location location in Report.LocationList)
+            {
+                GeoJson geo = new GeoJson(location.Latitude, location.Longitude, location.DateTime.ToLongDateString());
+                Result.Add(geo);
             }
+            return Json(JsonConvert.SerializeObject(Result));
         }
 
-        [HttpPost]
-        [ActionName("SetCompleted")]
+        [HttpPost("[action]")]
         public JsonResult SetCompleted(int ReportID) {
-            using (DatabaseContext db = new DatabaseContext()) {
-                Report report = db.Reports.Where(r => r.ID == ReportID).SingleOrDefault() ?? throw new RestException();
-                report.Completed = true;
-                db.SaveChangesAsync();
-            }
+            Report report = _context.Reports.Where(r => r.ID == ReportID).SingleOrDefault() ?? throw new RestException();
+            report.Completed = true;
+            _context.SaveChangesAsync();
 
             Result result = new Result(200, "Success");
             return Json(JsonConvert.SerializeObject(result));

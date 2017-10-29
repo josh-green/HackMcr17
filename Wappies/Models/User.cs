@@ -9,9 +9,7 @@ namespace Wappies.Models
 {
     public class User
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int ID { get; }
+        public int ID { get; set; }
 
         [DataType(DataType.PhoneNumber)]
         public String PhoneNumber { get; set; }
