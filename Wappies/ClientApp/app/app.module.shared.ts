@@ -13,6 +13,8 @@ import { MapComponent } from './components/map/map.component';
 import { MorseComponent } from './components/morse/morse.component';
 import { TestLocationComponent } from './components/testLocation/testLocation.component';
 
+import { locationServiceProvider } from './services/location/location.service.provider';
+
 @NgModule({
     declarations: [
         AppComponent,
@@ -38,6 +40,9 @@ import { TestLocationComponent } from './components/testLocation/testLocation.co
             { path: 'testLocation', component: TestLocationComponent },
             { path: '**', redirectTo: 'home' }
         ])
+    ],
+    providers: [
+        locationServiceProvider
     ]
 })
 export class AppModuleShared {
