@@ -16,6 +16,8 @@ namespace Wappies.Controllers
     [Route("api/Admin")]
     public class AdminController : Controller
     {
+        [HttpGet]
+        [ActionName("ActiveReports")]
         public JsonResult ActiveReports() {
             using (DatabaseContext db = new DatabaseContext()) {
                 List<GeoJson> Result = new List<GeoJson>();
@@ -30,6 +32,8 @@ namespace Wappies.Controllers
             }
         }
 
+        [HttpGet]
+        [ActionName("ReportLocations")]
         public JsonResult ReportLocations(int ReportID)
         {
             using (DatabaseContext db = new DatabaseContext())
@@ -46,6 +50,8 @@ namespace Wappies.Controllers
             }
         }
 
+        [HttpPost]
+        [ActionName("SetCompleted")]
         public JsonResult SetCompleted(int ReportID) {
             using (DatabaseContext db = new DatabaseContext()) {
                 Report report = db.Reports.Where(r => r.ID == ReportID).SingleOrDefault() ?? throw new RestException();

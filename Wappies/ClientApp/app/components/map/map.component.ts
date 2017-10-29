@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core'; 
+import { Http } from '@angular/http';
 import * as mapboxgl from 'mapbox-gl';
 import { GeoJson, FeatureCollection } from './geoJSON'
 import { Subject } from 'rxjs/Rx';
@@ -9,6 +10,8 @@ import { Subject } from 'rxjs/Rx';
     styleUrls: ['./map.component.css']
 })
 export class MapComponent implements OnInit {
+    private baseUrl: string;
+    private http: Http;
     private style: string = 'mapbox://styles/mapbox/streets-v9';
     private lat: number = 53.46;
     private lng: number = -2.23;
@@ -17,7 +20,9 @@ export class MapComponent implements OnInit {
     public activeReportsStore: Array<GeoJson>;
     public activeReportsSource;
 
-    constructor() {
+    constructor(http: Http, @Inject('BASE_URL') baseUrl: string) {
+        this.http = http;
+        this.baseUrl = baseUrl;
     }
 
     ngOnInit() {
@@ -60,7 +65,10 @@ export class MapComponent implements OnInit {
             type: 'symbol',
             layout: {
                 'icon-image': 'circle-15',
-                'icon-allow-overlap': true,
+                'icon-allow-overlap': true
+            },
+            paint: {
+                'icon-color': '#990000'
             }
         });
 
@@ -77,6 +85,12 @@ export class MapComponent implements OnInit {
         for (var i = 0; i < 20; i++) {
             arrGeo.push(new GeoJson([/*lng*/i,/*lat*/i]))
         }
+
+        //this.http.get(this.baseUrl + 'api/Admin/ActiveReports').subscribe(response => {
+        //    JSON.parse(response.json()).forEach(geoJson => {
+        //        arrGeo.push(new GeoJson([geoJson['Longitude'], geoJson['Latitude']]));
+        //    });
+        //});
 
         return arrGeo;
     }

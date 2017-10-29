@@ -14,6 +14,8 @@ import { MorseComponent } from './components/morse/morse.component';
 import { TestLocationComponent } from './components/testLocation/testLocation.component';
 import { TwoDigitsPipe } from './pipes/two-digits.pipe';
 
+import { locationServiceProvider } from './services/location/location.service.provider';
+
 @NgModule({
     declarations: [
         AppComponent,
@@ -40,6 +42,9 @@ import { TwoDigitsPipe } from './pipes/two-digits.pipe';
             { path: 'testLocation', component: TestLocationComponent },
             { path: '**', redirectTo: 'home' }
         ])
+    ],
+    providers: [
+        locationServiceProvider
     ]
 })
 export class AppModuleShared {
