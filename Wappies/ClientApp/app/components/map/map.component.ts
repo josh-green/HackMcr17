@@ -15,7 +15,8 @@ export class MapComponent implements OnInit {
     private style: string = 'mapbox://styles/mapbox/dark-v9';
     private lat: number = 53.46;
     private lng: number = -2.23;
-    private map: any; 
+    private map: any;
+    private reportLocationsSetIntervalId: number;
     
     public activeReportsSource;
     public reportLocationsSource;
@@ -113,21 +114,21 @@ export class MapComponent implements OnInit {
         });}
 
     private onClickMap(e) {
-        let bbox = [[e.point.x - 50, e.point.y - 50], [e.point.x + 50, e.point.y + 50]],
-            activeReportsFeature = this.map.queryRenderedFeatures(bbox, { layers: ['activeReports'] })[0],
-            reportLocationsSetIntervalId;
+        let bbox = [[e.point.x - 5, e.point.y - 5], [e.point.x + 5, e.point.y + 5]],
+            activeReportsFeature = this.map.queryRenderedFeatures(bbox, { layers: ['activeReports'] })[0];
 
         if (activeReportsFeature) {
-            this.map.setLayoutProperty('activeReports', 'visibility', 'none');
-            this.map.setLayoutProperty('reportLocations', 'visibility', 'visible');
-            this.getReportLocations(activeReportsFeature.properties.reportId);
-            reportLocationsSetIntervalId = setInterval(() => {
+            this.getReportLocations(activeReportsFeature.properties.reportId).then(() => {
+                this.map.setLayoutProperty('activeReports', 'visibility', 'none');
+                this.map.setLayoutProperty('reportLocations', 'visibility', 'visible');
+            });
+            this.reportLocationsSetIntervalId = setInterval(() => {
                 this.getReportLocations(activeReportsFeature.properties.reportId);
             }, 10000);            
         } else {
             this.map.setLayoutProperty('reportLocations', 'visibility', 'none');
             this.map.setLayoutProperty('activeReports', 'visibility', 'visible');
-            clearInterval(reportLocationsSetIntervalId);
+            clearInterval(this.reportLocationsSetIntervalId);
         }
     }
 
@@ -144,8 +145,7 @@ export class MapComponent implements OnInit {
     }
     
     private getReportLocations(reportId: number) {
-
-        this.http.get(this.baseUrl + 'api/Admin/ReportLocations/' + reportId).subscribe(response => {
+        return this.http.get(this.baseUrl + 'api/Admin/ReportLocations/' + reportId).toPromise().then(response => {
             let arrGeo: Array<GeoJson> = [],
                 arrCoords: Array<Array<number>> = [];
 
