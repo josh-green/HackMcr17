@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Wappies.Context;
 using Wappies.Models;
-using Newtonsoft.Json;
 using Microsoft.Rest;
 using Wappies.Utility;
 using Microsoft.EntityFrameworkCore;
@@ -26,19 +23,23 @@ namespace Wappies.Controllers
 
         [HttpGet("[action]")]
         public JsonResult ActiveReports() {
-            List<GeoJson> result = new List<GeoJson>();
+            var result = new List<GeoJson>();
             List<Report> reports = _context.Reports
                 .Include(r=>r.Locations)
-                .Where(r => r.Completed != true && r.Locations != null)
+                .Where(r => 
+                    r.Completed != true 
+                    && r.Locations != null
+                    && r.Locations.Any(l => l != null))
                 .ToList();
 
             foreach (Report rep in reports) {
                 Location location = rep.Locations.OrderByDescending(l => l.DateTime).FirstOrDefault();
+                if (location == null)
+                    continue;
                 GeoJson geo = new GeoJson(location.Latitude, location.Longitude, location.DateTime.ToLongDateString(), location.ReportID);
                 result.Add(geo);
             }
             return Json(result);
-            
         }
 
         [HttpGet("[action]/{reportID}")]
@@ -47,11 +48,15 @@ namespace Wappies.Controllers
             List<GeoJson> result = new List<GeoJson>();
             Report report = _context.Reports
                 .Include(r => r.Locations)
-                .Where(r => r.ID == reportID && r.Locations != null)
-                .FirstOrDefault();
+                .FirstOrDefault(r => 
+                    r.ID == reportID 
+                    && r.Locations != null
+                    && r.Locations.Any(l => l != null));
 
             foreach (Location location in report.Locations)
             {
+                if (location == null)
+                    continue;
                 GeoJson geo = new GeoJson(location.Latitude, location.Longitude, location.DateTime.ToLongDateString(), location.ReportID);
                 result.Add(geo);
             }
@@ -59,10 +64,10 @@ namespace Wappies.Controllers
         }
 
         [HttpPost("[action]")]
-        public JsonResult SetCompleted(int ReportID) {
-            Report report = _context.Reports.Where(r => r.ID == ReportID).FirstOrDefault() ?? throw new RestException();
+        public async Task<JsonResult> SetCompleted(int reportID) {
+            Report report = _context.Reports.FirstOrDefault(r => r.ID == reportID) ?? throw new RestException();
             report.Completed = true;
-            _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             Result result = new Result(200, "Success");
             return Json(result);
