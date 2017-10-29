@@ -35,7 +35,12 @@ namespace Wappies.Models
 
                 if (!context.Reports.Any())
                 {
+                    Random random = new Random();
+                    double latitude;
+                    double longitude;
                     for (int i = 0; i < 10; i++) {
+                        latitude = 51.46 + (random.NextDouble() * 4);
+                        longitude = -4.23 + (random.NextDouble() * 4);
                         context.Reports.Add(new Report
                         {
                             Created = DateTime.Now.AddDays(-1),
@@ -54,9 +59,11 @@ namespace Wappies.Models
                                 {
                                     ReportID = id,
                                     DateTime = DateTime.Now.AddDays(-1).AddMinutes(-j),
-                                    Longitude = (-2.23 + i/10 + ((i+j) * Math.Sin(j*Math.Pow(j, -j)))).ToString(),
-                                    Latitude = (53.46 - i/10 + ((i+j) * Math.Cos(j*Math.Pow(j, j)))).ToString()
+                                    Longitude = longitude.ToString(),
+                                    Latitude = latitude.ToString()
                                 });
+                                latitude += random.NextDouble() - 0.5;
+                                longitude += random.NextDouble() - 0.5;
                             }
                         }
                         context.SaveChanges();
