@@ -38,11 +38,11 @@ namespace Wappies.Controllers
             
         }
 
-        [HttpGet("[action]")]
-        public JsonResult ReportLocations(int ReportID)
+        [HttpGet("[action]/{reportID}")]
+        public JsonResult ReportLocations(int reportID)
         {
             List<GeoJson> Result = new List<GeoJson>();
-            Report Report = _context.Reports.Include(r => r.Locations).Where(r => r.ID == ReportID).FirstOrDefault();
+            Report Report = _context.Reports.Include(r => r.Locations).Where(r => r.ID == reportID).FirstOrDefault();
 
             foreach (Location location in Report.Locations)
             {

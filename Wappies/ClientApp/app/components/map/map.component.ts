@@ -1,8 +1,8 @@
-import { Component, OnInit, Inject } from '@angular/core'; 
+import { Component, OnInit, Inject  } from '@angular/core'; 
 import { Http } from '@angular/http';
 import * as mapboxgl from 'mapbox-gl';
 import { GeoJson, FeatureCollection } from './geoJSON'
-import { Subject } from 'rxjs/Rx';
+import { Subject, Observable } from 'rxjs/Rx';
 
 @Component({
     selector: 'map',
@@ -46,6 +46,16 @@ export class MapComponent implements OnInit {
     }
 
     private onLoadMap() {
+        this.onLoadMap_ActiveReports();
+        this.onLoadMap_ReportLocations();
+        
+        // periodically refresh the active reports store
+        setInterval(() => {
+            this.getActiveReports();
+        }, 10000);
+    }
+
+    private onLoadMap_ActiveReports() {
         // register source
         this.map.addSource('activeReports', {
             type: 'geojson',
@@ -58,7 +68,7 @@ export class MapComponent implements OnInit {
 
         // get source
         this.activeReportsSource = this.map.getSource('activeReports');
-        this.activeReportsSource.setData(new FeatureCollection(this.getActiveReports()));
+        this.getActiveReports();
 
         //add layer for active reports
         this.map.addLayer({
@@ -73,13 +83,14 @@ export class MapComponent implements OnInit {
                 'icon-color': '#990000'
             }
         });
+    }
 
+    private onLoadMap_ReportLocations() {
         this.map.addSource('reportLocations', {
             type: 'geojson',
             data: {
                 type: 'FeatureCollection',
-                features: [
-                    new GeoJson([this.lng, this.lat])]
+                features: []
             }
         });
 
@@ -98,24 +109,19 @@ export class MapComponent implements OnInit {
             paint: {
                 'icon-color': '#990000'
             }
-        });
-
-        // periodically refresh the active reports store
-        setInterval(() => {
-            this.activeReportsSource.setData(new FeatureCollection(this.getActiveReports()));
-        }, 10000);
-    }
+        });}
 
     private onClickMap(e) {
-        let bbox = [[e.point.x - 5, e.point.y - 5], [e.point.x + 5, e.point.y + 5]],
+        let bbox = [[e.point.x - 50, e.point.y - 50], [e.point.x + 50, e.point.y + 50]],
             activeReportsFeature = this.map.queryRenderedFeatures(bbox, { layers: ['activeReports'] })[0],
             reportLocationsSetIntervalId;
 
         if (activeReportsFeature) {
             this.map.setLayoutProperty('activeReports', 'visibility', 'none');
-            this.reportLocationsSource.setData(new FeatureCollection(this.getReportLocations(activeReportsFeature.ReportID)));
+            this.map.setLayoutProperty('reportLocations', 'visibility', 'visible');
+            this.getReportLocations(activeReportsFeature.properties.reportId);
             reportLocationsSetIntervalId = setInterval(() => {
-                this.reportLocationsSource.setData(new FeatureCollection(this.getReportLocations(activeReportsFeature.ReportID)));
+                this.getReportLocations(activeReportsFeature.properties.reportId);
             }, 10000);            
         } else {
             this.map.setLayoutProperty('reportLocations', 'visibility', 'none');
@@ -124,27 +130,29 @@ export class MapComponent implements OnInit {
         }
     }
 
-    private getActiveReports(): Array<GeoJson> {
-        let arrGeo: Array<GeoJson> = [];
-
+    private getActiveReports(): any {
         this.http.get(this.baseUrl + 'api/Admin/ActiveReports').subscribe(response => {
-            response.json().forEach(geoJson => {
-                arrGeo.push(new GeoJson([geoJson['Longitude'], geoJson['Latitude']], geoJson['ReportID']));
-            });
-        });
+            let arrGeo: Array<GeoJson> = [];
 
-        return arrGeo;
+            response.json().forEach(geoJson => {
+                arrGeo.push(new GeoJson([geoJson['longitude'], geoJson['latitude']], { reportId: geoJson['reportID'] }));
+            });
+
+            this.activeReportsSource.setData(new FeatureCollection(arrGeo));
+        });
     }
     
     private getReportLocations(reportId: number) {
-        let arrGeo: Array<GeoJson> = [];
 
         this.http.get(this.baseUrl + 'api/Admin/ReportLocations/' + reportId).subscribe(response => {
+            let arrGeo: Array<GeoJson> = [];
+
             response.json().forEach(geoJson => {
-                arrGeo.push(new GeoJson([geoJson['Longitude'], geoJson['Latitude']]));
+                arrGeo.push(new GeoJson([geoJson['longitude'], geoJson['latitude']], { reportId: geoJson['reportID'] }));
             });
+
+            this.reportLocationsSource.setData(new FeatureCollection(arrGeo));
         });
 
-        return arrGeo;
     }
 }
