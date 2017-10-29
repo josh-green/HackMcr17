@@ -3,4 +3,9 @@
     .body-content {
         padding-top: 50px;
     }
+
+    .col-sm-9 {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
 }
