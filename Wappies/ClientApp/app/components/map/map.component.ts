@@ -114,7 +114,6 @@ export class MapComponent implements OnInit {
 
         if (activeReportsFeature) {
             this.map.setLayerProperty('activeReports', 'visibility', 'none');
-            //TODO: get data for report locations of clicked feature
             this.activeReportsSource.setData(new FeatureCollection(this.getReportLocations(activeReportsFeature.reportId)));
             reportLocationsSetIntervalId = setInterval(() => {
                 this.activeReportsSource.setData(new FeatureCollection(this.getReportLocations(activeReportsFeature.reportId)));
@@ -127,35 +126,25 @@ export class MapComponent implements OnInit {
     }
 
     private getActiveReports(): Array<GeoJson> {
-        //TODO: ajax call to Controller for active sos reports
-        //TODO: Remove, test code
         let arrGeo: Array<GeoJson> = [];
-        for (var i = 0; i < 20; i++) {
-            arrGeo.push(new GeoJson([/*lng*/i,/*lat*/i], {reportID: i}))
-        }
 
-        //this.http.get(this.baseUrl + 'api/Admin/ActiveReports').subscribe(response => {
-        //    JSON.parse(response.json()).forEach(geoJson => {
-        //        arrGeo.push(new GeoJson([geoJson['Longitude'], geoJson['Latitude']]));
-        //    });
-        //});
+        this.http.get(this.baseUrl + 'api/Admin/ActiveReports').subscribe(response => {
+            JSON.parse(response.json()).forEach(geoJson => {
+                arrGeo.push(new GeoJson([geoJson['Longitude'], geoJson['Latitude']]));
+            });
+        });
 
         return arrGeo;
     }
     
     private getReportLocations(reportId: number) {
-        //TODO: for a given user, get historic reports for the current incident
-
         let arrGeo: Array<GeoJson> = [];
-        for (var i = 0; i < 20; i++) {
-            arrGeo.push(new GeoJson([/*lng*/-i,/*lat*/i], { reportID: i }))
-        }
 
-        //this.http.get(this.baseUrl + 'api/Admin/ReportLocations', {reportID: reportId}).subscribe(response => {
-        //    JSON.parse(response.json()).forEach(geoJson => {
-        //        arrGeo.push(new GeoJson([geoJson['Longitude'], geoJson['Latitude']]));
-        //    });
-        //});
+        this.http.get(this.baseUrl + 'api/Admin/ReportLocations/' + reportId).subscribe(response => {
+            JSON.parse(response.json()).forEach(geoJson => {
+                arrGeo.push(new GeoJson([geoJson['Longitude'], geoJson['Latitude']]));
+            });
+        });
 
         return arrGeo;
     }
