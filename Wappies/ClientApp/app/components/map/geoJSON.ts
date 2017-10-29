@@ -18,6 +18,17 @@ export class GeoJson implements IGeoJson {
         }
     }
 }
+
+export class GeoJsonLine implements IGeoJson {
+    type = 'Feature';
+    geometry: IGeometry;
+    constructor(coordinates, public properties?) {
+        this.geometry = {
+            type: 'LineString',
+            coordinates: coordinates
+        }
+    }
+}
 export class FeatureCollection {
     type = 'FeatureCollection'
     constructor(public features: Array<GeoJson>) { }

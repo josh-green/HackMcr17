@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject  } from '@angular/core'; 
 import { Http } from '@angular/http';
 import * as mapboxgl from 'mapbox-gl';
-import { GeoJson, FeatureCollection } from './geoJSON'
+import { GeoJson, FeatureCollection, GeoJsonLine } from './geoJSON'
 import { Subject, Observable } from 'rxjs/Rx';
 
 @Component({
@@ -80,7 +80,7 @@ export class MapComponent implements OnInit {
                 'icon-allow-overlap': true
             },
             paint: {
-                'icon-color': '#990000'
+                'icon-color': '#F00'
             }
         });
     }
@@ -101,13 +101,14 @@ export class MapComponent implements OnInit {
         this.map.addLayer({
             id: 'reportLocations',
             source: 'reportLocations',
-            type: 'symbol',
-            layout: {
-                'icon-image': 'circle-15',
-                'icon-allow-overlap': true
+            type: 'line',
+            "layout": {
+                "line-join": "round",
+                "line-cap": "butt"
             },
-            paint: {
-                'icon-color': '#990000'
+            "paint": {
+                "line-color": "#F00",
+                "line-width": 2
             }
         });}
 
@@ -145,11 +146,14 @@ export class MapComponent implements OnInit {
     private getReportLocations(reportId: number) {
 
         this.http.get(this.baseUrl + 'api/Admin/ReportLocations/' + reportId).subscribe(response => {
-            let arrGeo: Array<GeoJson> = [];
+            let arrGeo: Array<GeoJson> = [],
+                arrCoords: Array<Array<number>> = [];
 
             response.json().forEach(geoJson => {
-                arrGeo.push(new GeoJson([geoJson['longitude'], geoJson['latitude']], { reportId: geoJson['reportID'] }));
+                arrCoords.push([geoJson['longitude'], geoJson['latitude']]);
             });
+
+            arrGeo.push(new GeoJsonLine(arrCoords));
 
             this.reportLocationsSource.setData(new FeatureCollection(arrGeo));
         });
