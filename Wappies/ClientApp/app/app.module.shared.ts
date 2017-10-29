@@ -20,9 +20,6 @@ import { locationServiceProvider } from './services/location/location.service.pr
     declarations: [
         AppComponent,
         NavMenuComponent,
-        CounterComponent,
-        FetchDataComponent,
-        HomeComponent,
         MapComponent,
         MorseComponent,
         TestLocationComponent,
@@ -33,14 +30,10 @@ import { locationServiceProvider } from './services/location/location.service.pr
         HttpModule,
         FormsModule,
         RouterModule.forRoot([
-            { path: '', redirectTo: 'home', pathMatch: 'full' },
-            { path: 'home', component: HomeComponent },
-            { path: 'counter', component: CounterComponent },
-            { path: 'fetch-data', component: FetchDataComponent },
+            { path: '', redirectTo: 'morse', pathMatch: 'full' },
             { path: 'map', component: MapComponent },
             { path: 'morse', component: MorseComponent },
-            { path: 'testLocation', component: TestLocationComponent },
-            { path: '**', redirectTo: 'home' }
+            { path: '**', redirectTo: 'morse' }
         ])
     ],
     providers: [
