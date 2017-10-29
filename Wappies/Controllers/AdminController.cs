@@ -30,7 +30,7 @@ namespace Wappies.Controllers
             List<Report> Reports = _context.Reports.Include(r=>r.Locations).Where(r => r.Completed != true).ToList();
 
             foreach (Report rep in Reports) {
-                Location location = rep.Locations.OrderByDescending(l => l.DateTime).SingleOrDefault();
+                Location location = rep.Locations.OrderByDescending(l => l.DateTime).FirstOrDefault();
                 GeoJson geo = new GeoJson(location.Latitude, location.Longitude, location.DateTime.ToLongDateString());
                 Result.Add(geo);
             }
@@ -42,7 +42,7 @@ namespace Wappies.Controllers
         public JsonResult ReportLocations(int ReportID)
         {
             List<GeoJson> Result = new List<GeoJson>();
-            Report Report = _context.Reports.Include(r => r.Locations).Where(r => r.ID == ReportID).SingleOrDefault();
+            Report Report = _context.Reports.Include(r => r.Locations).Where(r => r.ID == ReportID).FirstOrDefault();
 
             foreach (Location location in Report.Locations)
             {
@@ -54,7 +54,7 @@ namespace Wappies.Controllers
 
         [HttpPost("[action]")]
         public JsonResult SetCompleted(int ReportID) {
-            Report report = _context.Reports.Where(r => r.ID == ReportID).SingleOrDefault() ?? throw new RestException();
+            Report report = _context.Reports.Where(r => r.ID == ReportID).FirstOrDefault() ?? throw new RestException();
             report.Completed = true;
             _context.SaveChangesAsync();
 

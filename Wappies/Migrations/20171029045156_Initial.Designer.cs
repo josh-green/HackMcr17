@@ -11,8 +11,8 @@ using Wappies.Context;
 namespace Wappies.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20171029042323_LocationLinking")]
-    partial class LocationLinking
+    [Migration("20171029045156_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,6 +26,14 @@ namespace Wappies.Migrations
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTime>("LastLogin");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("Password");
+
+                    b.Property<string>("Username");
+
                     b.HasKey("ID");
 
                     b.ToTable("Administrators");
@@ -36,11 +44,17 @@ namespace Wappies.Migrations
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("ReportID1");
+                    b.Property<DateTime>("DateTime");
+
+                    b.Property<string>("Latitude");
+
+                    b.Property<string>("Longitude");
+
+                    b.Property<int>("ReportID");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("ReportID1");
+                    b.HasIndex("ReportID");
 
                     b.ToTable("Locations");
                 });
@@ -73,9 +87,10 @@ namespace Wappies.Migrations
 
             modelBuilder.Entity("Wappies.Models.Location", b =>
                 {
-                    b.HasOne("Wappies.Models.Report")
+                    b.HasOne("Wappies.Models.Report", "Report")
                         .WithMany("Locations")
-                        .HasForeignKey("ReportID1");
+                        .HasForeignKey("ReportID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

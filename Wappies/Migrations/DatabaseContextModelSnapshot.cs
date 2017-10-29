@@ -25,6 +25,14 @@ namespace Wappies.Migrations
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTime>("LastLogin");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("Password");
+
+                    b.Property<string>("Username");
+
                     b.HasKey("ID");
 
                     b.ToTable("Administrators");
@@ -35,11 +43,17 @@ namespace Wappies.Migrations
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("ReportID1");
+                    b.Property<DateTime>("DateTime");
+
+                    b.Property<string>("Latitude");
+
+                    b.Property<string>("Longitude");
+
+                    b.Property<int>("ReportID");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("ReportID1");
+                    b.HasIndex("ReportID");
 
                     b.ToTable("Locations");
                 });
@@ -72,9 +86,10 @@ namespace Wappies.Migrations
 
             modelBuilder.Entity("Wappies.Models.Location", b =>
                 {
-                    b.HasOne("Wappies.Models.Report")
+                    b.HasOne("Wappies.Models.Report", "Report")
                         .WithMany("Locations")
-                        .HasForeignKey("ReportID1");
+                        .HasForeignKey("ReportID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

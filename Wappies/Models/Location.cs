@@ -10,17 +10,16 @@ namespace Wappies.Models
     public class Location
     {
         public int ID { get; set; }
+        
+        public int ReportID { get; set; }
 
-        [ForeignKey("Report")]
-        public int ReportID;
-
-        public Report Report;
+        public Report Report { get; set; }
 
         [DataType(DataType.DateTime)]
-        public DateTime DateTime;
+        public DateTime DateTime { get; set; }
 
-        public String Longitude;
+        public String Longitude { get; set; }
 
-        public String Latitude;
+        public String Latitude { get; set; }
     }
 }

@@ -14,7 +14,11 @@ namespace Wappies.Migrations
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    LastLogin = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Username = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -54,23 +58,26 @@ namespace Wappies.Migrations
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ReportID1 = table.Column<int>(type: "int", nullable: true)
+                    DateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Latitude = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Longitude = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ReportID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Locations", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Locations_Reports_ReportID1",
-                        column: x => x.ReportID1,
+                        name: "FK_Locations_Reports_ReportID",
+                        column: x => x.ReportID,
                         principalTable: "Reports",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Locations_ReportID1",
+                name: "IX_Locations_ReportID",
                 table: "Locations",
-                column: "ReportID1");
+                column: "ReportID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

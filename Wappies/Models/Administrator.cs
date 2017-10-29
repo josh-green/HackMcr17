@@ -8,14 +8,14 @@ namespace Wappies.Models
         public int ID { get; set; }
 
         [DataType(DataType.EmailAddress)]
-        public String Username;
+        public String Username { get; set; }
 
         [DataType(DataType.Password)]
-        public String Password;
+        public String Password { get; set; }
 
-        public String Name;
+        public String Name { get; set; }
 
         [DataType(DataType.DateTime)]
-        public DateTime LastLogin;
+        public DateTime LastLogin { get; set; }
     }
 }
