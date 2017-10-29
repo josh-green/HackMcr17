@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Rest;
 using Wappies.Context;
 using Wappies.Models;
 using Wappies.Utility;
@@ -61,6 +62,17 @@ namespace Wappies.Controllers
 
             var result = new ReportResult(200, "Success", report.ID);
             
+            return Json(result);
+        }
+        
+        [HttpPost("[action]")]
+        public JsonResult CompleteReport(int reportID)
+        {
+            Report report = _context.Reports.FirstOrDefault(r => r.ID == reportID) ?? throw new RestException();
+            report.Completed = true;
+            _context.SaveChangesAsync();
+
+            Result result = new Result(200, "Success");
             return Json(result);
         }
 
