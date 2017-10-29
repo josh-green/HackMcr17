@@ -28,6 +28,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="ClientApp\dist\manifest.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="wwwroot\assets\images\icons\" />
   </ItemGroup>
 
