@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 namespace Wappies.Controllers
 {
     [Produces("application/json")]
-    [Route("api/Client")]
+    [Route("api/[controller]")]
     public class ClientController : Controller
     {
         private readonly DatabaseContext _context;
@@ -22,8 +22,7 @@ namespace Wappies.Controllers
             _context = context;
         }
 
-        [HttpPost]
-        [ActionName("InitiliseReport")]
+        [HttpGet("[action]")]
         public JsonResult InitialiseReport()
         {
             Report report = new Report();
@@ -35,25 +34,32 @@ namespace Wappies.Controllers
             return Json(result);
         }
 
-        [HttpPost]
-        [ActionName("UpdateReport")]
-        public JsonResult UpdateReport(string Longitude, string Latitude, int ReportID) {
-            Report report = new Report();
-            Location location = new Location();
-            ReportResult result;
-            
-            report.Created = DateTime.Now;
-            _context.Reports.Add(report);
+        [HttpPost("[action]")]
+        public JsonResult UpdateReport([FromBody]ReportObj reportObj)
+        {
+            var report = _context.Reports.FirstOrDefault(r => r.ID == reportObj.ReportID);
 
-            location.ReportID = report.ID;
-            location.Longitude = Longitude;
-            location.Latitude = Latitude;
-            location.DateTime = DateTime.Now;
+            if (report == null)
+            {
+                report = new Report();
+                _context.Reports.Add(report);
+                _context.SaveChanges();
+            }
+
+            report.Updated = DateTime.Now;
+
+            Location location = new Location
+            {
+                ReportID = report.ID,
+                Longitude = reportObj.Longitude,
+                Latitude = reportObj.Latitude,
+                DateTime = DateTime.Now
+            };
+
             _context.Locations.Add(location);
-
             _context.SaveChanges();
 
-            result = new ReportResult(200, "Success", report.ID);
+            var result = new ReportResult(200, "Success", report.ID);
             
             return Json(result);
         }
@@ -66,8 +72,15 @@ namespace Wappies.Controllers
             public ReportResult(int ResultCode, String ResultMessage, int? ID) {
                 Code = ResultCode;
                 Message = ResultMessage;
-                ReportID = (ID.HasValue) ? 0 : ID.Value;
+                ReportID = ID ?? 0;
             }
+        }
+
+        public class ReportObj
+        {
+            public string Longitude;
+            public string Latitude;
+            public int ReportID;
         }
     }
 }
