@@ -1,28 +1,34 @@
 #morse-detector {
-    width: 1000px;
-    height: 1000px;
+    width: 100%;
+    height: auto;
     text-align: center;
-    background-color: red;
+    /*background-color: red;*/
 }
 
 .clock-part {
     font-family: 'Saira Semi Condensed', sans-serif;
     font-weight: bold;
-    font-size: 72pt;
+    font-size: 15vw;
     display: inline-block;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 #clock-hours {
-    width: 140px;
+    width: 30vw;
     text-align: right;
 }
 
 #clock-colon {
-    width: 20px;
+    width: 10vw;
     text-align: center;
 }
 
 #clock-minutes {
-    width: 140px;
+    width: 30vw;
     text-align: left;
 }
