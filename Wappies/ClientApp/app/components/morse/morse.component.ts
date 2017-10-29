@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import * as MorseNode from 'morse-node';
+import { LocationService } from '../../services/location/location.service';
 
 @Component({
     selector: 'morse',
@@ -7,6 +8,13 @@ import * as MorseNode from 'morse-node';
     styleUrls: ['./morse.component.css']
 })
 export class MorseComponent implements OnInit {
+    constructor(private locationServ: LocationService, @Inject("BASE_URL") baseUrl: string) {
+        this.locationService = locationServ;
+        this.baseUrl = baseUrl;
+    }
+
+    private locationService: LocationService;
+    private baseUrl: string;
     private DASH: string = '-';
     private DOT: string = '.';
     private CHAR_BREAK: string = ' ';
@@ -76,12 +84,14 @@ export class MorseComponent implements OnInit {
     public beginTransmission() {
         //TODO: This
         this.locationStuffEnabled = true;
+        this.locationService.startSendingLocation(this.baseUrl);
         console.log('%cLET\'S GO', 'color: red; font-size: 216pt; text-align: center;');
     }
 
     public ceaseTransmission() {
         //TODO: This too
         this.locationStuffEnabled = false;
+        this.locationService.stopSendingLocation();
         console.log('%cLET\'S NO', 'color: red; font-size: 216pt; text-align: center;');
     }
 

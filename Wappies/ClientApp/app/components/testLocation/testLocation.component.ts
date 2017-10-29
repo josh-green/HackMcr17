@@ -1,4 +1,4 @@
-﻿import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit, Inject } from '@angular/core';
 import { LocationService } from '../../services/location/location.service';
 
 
@@ -10,28 +10,16 @@ import { LocationService } from '../../services/location/location.service';
 /** testLocation component*/
 export class TestLocationComponent implements OnInit {
     /** testLocation ctor */
-    constructor(private locationServ: LocationService) {
+    constructor(private locationServ: LocationService, @Inject("BASE_URL") baseUrl: string) {
         this.locationService = locationServ;
+        this.baseUrl = baseUrl;
     }
 
     locationService: LocationService;
+    baseUrl: string;
     locations: string[] = [];
 
     getLocation(): any {
-        //if (!this.isAvailable()) {
-        //    console.error('navigator.geolocation is unavailable');
-        //    return;
-        //}
-
-        //navigator.geolocation.getCurrentPosition((position) => {
-        //        this.locations.push(position.coords.latitude + ', ' + position.coords.longitude);
-
-        //    },
-        //    (err) => {
-        //        console.error('A geolocation error occurred.', err);
-        //    });  
-
-
         this.locationService.getLocation().subscribe(
             (position) => {
                 this.locations.push(position.coords.latitude + ', ' + position.coords.longitude);
@@ -41,16 +29,22 @@ export class TestLocationComponent implements OnInit {
                 console.error(err);
             });
     };
-
-    isAvailable(): boolean {
-        return !!('geolocation' in navigator);
-    }
-
+    
     logLocation(): any {
-        this.locationService.getPosition({}).then((position) => console.log(position)).catch(err => {
-            console.error(err);
-        });
-    }
+        this.locationService.getPosition({})
+            .then((position) => console.log(position))
+            .catch(err => console.error(err));
+    };
+
+    startSending(): any {
+        this.locationService.startSendingLocation(this.baseUrl);
+        console.info('Sending location data!');
+    };
+
+    stopSending(): any {
+        this.locationService.stopSendingLocation();
+        console.info('No longer sending location data!');
+    };
 
     /** Called by Angular after testLocation component initialized */
     ngOnInit(): void { }
