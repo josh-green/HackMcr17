@@ -16,9 +16,9 @@ export class MapComponent implements OnInit {
     private lat: number = 53.46;
     private lng: number = -2.23;
     private map: any; 
-
-    public activeReportsStore: Array<GeoJson>;
+    
     public activeReportsSource;
+    public reportLocationsSource;
 
     constructor(http: Http, @Inject('BASE_URL') baseUrl: string) {
         this.http = http;
@@ -41,6 +41,8 @@ export class MapComponent implements OnInit {
         });
 
         this.map.on('load', this.onLoadMap.bind(this));
+
+        this.map.on('click', this.onClickMap.bind(this, event))
     }
 
     private onLoadMap() {
@@ -72,10 +74,56 @@ export class MapComponent implements OnInit {
             }
         });
 
+        this.map.addSource('activeReports', {
+            type: 'geojson',
+            data: {
+                type: 'FeatureCollection',
+                features: [
+                    new GeoJson([this.lng, this.lat])]
+            }
+        });
+
+        // get source
+        this.reportLocationsSource = this.map.getSource('reportLocations');
+        this.reportLocationsSource.setData(new FeatureCollection(this.getActiveReports()));
+
+        //add layer for active reports
+        this.map.addLayer({
+            id: 'reportLocations',
+            source: 'reportLocations',
+            type: 'symbol',
+            layout: {
+                'icon-image': 'circle-15',
+                'icon-allow-overlap': true
+            },
+            paint: {
+                'icon-color': '#990000'
+            }
+        });
+
         // periodically refresh the active reports store
         setInterval(() => {
-            //_this.activeReportsSource.setData(new FeatureCollection(_this.getActiveReports()));
+            this.activeReportsSource.setData(new FeatureCollection(this.getActiveReports()));
         }, 10000);
+    }
+
+    private onClickMap(e) {
+        let bbox = [[e.point.x - 5, e.point.y - 5], [e.point.x + 5, e.point.y + 5]],
+            activeReportsFeature = this.map.queryRenderedFeatures(bbox, { layers: ['activeReports'] })[0],
+            reportLocationsSetIntervalId;
+
+        if (activeReportsFeature) {
+            this.map.setLayerProperty('activeReports', 'visibility', 'none');
+            //TODO: get data for report locations of clicked feature
+            this.activeReportsSource.setData(new FeatureCollection(this.getReportLocations(activeReportsFeature.reportId)));
+            reportLocationsSetIntervalId = setInterval(() => {
+                this.activeReportsSource.setData(new FeatureCollection(this.getReportLocations(activeReportsFeature.reportId)));
+            }, 10000);            
+        } else {
+            this.map.setLayerProperty('reportLocations', 'visibility', 'none');
+            this.map.setLayerProperty('activeReports', 'visibility', 'visible');
+            clearInterval(reportLocationsSetIntervalId);
+        }
     }
 
     private getActiveReports(): Array<GeoJson> {
@@ -83,7 +131,7 @@ export class MapComponent implements OnInit {
         //TODO: Remove, test code
         let arrGeo: Array<GeoJson> = [];
         for (var i = 0; i < 20; i++) {
-            arrGeo.push(new GeoJson([/*lng*/i,/*lat*/i]))
+            arrGeo.push(new GeoJson([/*lng*/i,/*lat*/i], {reportID: i}))
         }
 
         //this.http.get(this.baseUrl + 'api/Admin/ActiveReports').subscribe(response => {
@@ -94,12 +142,21 @@ export class MapComponent implements OnInit {
 
         return arrGeo;
     }
-
-    private plotMarker(geoJson: GeoJson) {
-        //TODO: add geoJSON marker to map
-    }
-
-    private getReportLocations(userId: number, reportId: number) {
+    
+    private getReportLocations(reportId: number) {
         //TODO: for a given user, get historic reports for the current incident
+
+        let arrGeo: Array<GeoJson> = [];
+        for (var i = 0; i < 20; i++) {
+            arrGeo.push(new GeoJson([/*lng*/-i,/*lat*/i], { reportID: i }))
+        }
+
+        //this.http.get(this.baseUrl + 'api/Admin/ReportLocations', {reportID: reportId}).subscribe(response => {
+        //    JSON.parse(response.json()).forEach(geoJson => {
+        //        arrGeo.push(new GeoJson([geoJson['Longitude'], geoJson['Latitude']]));
+        //    });
+        //});
+
+        return arrGeo;
     }
 }
