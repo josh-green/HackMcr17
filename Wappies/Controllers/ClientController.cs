@@ -19,12 +19,9 @@ namespace Wappies.Controllers
             Report report = new Report();
             Location location = new Location();
             ReportResult result;
-            User user = UserUtility.CreateUser(PhoneNumber);
 
             using (DatabaseContext db = new DatabaseContext()) {
                 report.Created = DateTime.Now;
-                report.User = user;
-                report.UserID = user.ID;
                 db.Reports.Add(report);
                 db.SaveChanges();
 
