@@ -22,7 +22,22 @@ namespace Wappies.Controllers
             _context = context;
         }
 
-        public JsonResult CreateReport(string PhoneNumber, string Longitude, string Latitude) {
+        [HttpPost]
+        [ActionName("InitiliseReport")]
+        public JsonResult InitialiseReport()
+        {
+            Report report = new Report();
+            report.Created = DateTime.Now;
+            _context.Reports.Add(report);
+            _context.SaveChanges();
+
+            ReportResult result = new ReportResult(200, "Success", report.ID);
+            return Json(JsonConvert.SerializeObject(result));
+        }
+
+        [HttpPost]
+        [ActionName("UpdateReport")]
+        public JsonResult UpdateReport(string Longitude, string Latitude, int ReportID) {
             Report report = new Report();
             Location location = new Location();
             ReportResult result;
@@ -33,6 +48,7 @@ namespace Wappies.Controllers
             location.ReportID = report.ID;
             location.Longitude = Longitude;
             location.Latitude = Latitude;
+            location.DateTime = DateTime.Now;
             _context.Locations.Add(location);
 
             _context.SaveChanges();
