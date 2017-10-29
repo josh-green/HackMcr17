@@ -12,7 +12,7 @@ import { Subject, Observable } from 'rxjs/Rx';
 export class MapComponent implements OnInit {
     private baseUrl: string;
     private http: Http;
-    private style: string = 'mapbox://styles/mapbox/streets-v9';
+    private style: string = 'mapbox://styles/mapbox/dark-v9';
     private lat: number = 53.46;
     private lng: number = -2.23;
     private map: any; 
