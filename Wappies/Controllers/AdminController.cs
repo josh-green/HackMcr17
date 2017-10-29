@@ -9,6 +9,7 @@ using Wappies.Models;
 using Newtonsoft.Json;
 using Microsoft.Rest;
 using Wappies.Utility;
+using Microsoft.EntityFrameworkCore;
 
 namespace Wappies.Controllers
 {
@@ -26,10 +27,10 @@ namespace Wappies.Controllers
         [HttpGet("[action]")]
         public JsonResult ActiveReports() {
             List<GeoJson> Result = new List<GeoJson>();
-            List<Report> Reports = _context.Reports.Where(r => r.Completed != true).ToList();
+            List<Report> Reports = _context.Reports.Include(r=>r.Locations).Where(r => r.Completed != true).ToList();
 
             foreach (Report rep in Reports) {
-                Location location = rep.LocationList.OrderByDescending(l => l.DateTime).SingleOrDefault();
+                Location location = rep.Locations.OrderByDescending(l => l.DateTime).SingleOrDefault();
                 GeoJson geo = new GeoJson(location.Latitude, location.Longitude, location.DateTime.ToLongDateString());
                 Result.Add(geo);
             }
@@ -41,9 +42,9 @@ namespace Wappies.Controllers
         public JsonResult ReportLocations(int ReportID)
         {
             List<GeoJson> Result = new List<GeoJson>();
-            Report Report = _context.Reports.Where(r => r.ID == ReportID).SingleOrDefault();
+            Report Report = _context.Reports.Include(r => r.Locations).Where(r => r.ID == ReportID).SingleOrDefault();
 
-            foreach (Location location in Report.LocationList)
+            foreach (Location location in Report.Locations)
             {
                 GeoJson geo = new GeoJson(location.Latitude, location.Longitude, location.DateTime.ToLongDateString());
                 Result.Add(geo);

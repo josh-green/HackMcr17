@@ -14,6 +14,8 @@ namespace Wappies.Models
         [ForeignKey("Report")]
         public int ReportID;
 
+        public Report Report;
+
         [DataType(DataType.DateTime)]
         public DateTime DateTime;
 

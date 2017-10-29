@@ -16,6 +16,6 @@ namespace Wappies.Models
 
         public bool Completed { get; set; }
 
-        public List<Location> LocationList { get; set; }
+        public List<Location> Locations { get; set; }
     }
 }
