@@ -1,14 +1,17 @@
 #morse-detector {
     width: 100%;
-    height: auto;
+    height: 93vh;
     text-align: center;
-    /*background-color: red;*/
+    color: #D0D0D0;
+    background-image: url('./wallpaper.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 .clock-part {
     font-family: 'Saira Semi Condensed', sans-serif;
     font-weight: bold;
-    font-size: 15vw;
+    font-size: 20vw;
     display: inline-block;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
