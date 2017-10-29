@@ -14,6 +14,12 @@ namespace Wappies.Models
         {
             using (var context = new DatabaseContext(serviceProvider.GetRequiredService<DbContextOptions<DatabaseContext>>()))
             {
+                // Clear out old test data
+                context.Administrators.RemoveRange(context.Administrators);
+                context.Reports.RemoveRange(context.Reports);
+                context.Locations.RemoveRange(context.Locations);
+                context.SaveChanges();
+
                 if (!context.Administrators.Any())
                 {
                     context.Administrators.Add(new Administrator
@@ -48,8 +54,8 @@ namespace Wappies.Models
                                 {
                                     ReportID = id,
                                     DateTime = DateTime.Now.AddDays(-1).AddMinutes(-j),
-                                    Longitude = (-2.23 + (j * Math.Sin(j*Math.Pow(j, -j)))).ToString(),
-                                    Latitude = (53.46  + (j * Math.Cos(j*Math.Pow(j, j)))).ToString()
+                                    Longitude = (-2.23 + i/10 + ((i+j) * Math.Sin(j*Math.Pow(j, -j)))).ToString(),
+                                    Latitude = (53.46 - i/10 + ((i+j) * Math.Cos(j*Math.Pow(j, j)))).ToString()
                                 });
                             }
                         }
