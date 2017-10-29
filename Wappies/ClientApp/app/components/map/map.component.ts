@@ -74,7 +74,7 @@ export class MapComponent implements OnInit {
             }
         });
 
-        this.map.addSource('activeReports', {
+        this.map.addSource('reportLocations', {
             type: 'geojson',
             data: {
                 type: 'FeatureCollection',
@@ -85,7 +85,6 @@ export class MapComponent implements OnInit {
 
         // get source
         this.reportLocationsSource = this.map.getSource('reportLocations');
-        this.reportLocationsSource.setData(new FeatureCollection(this.getActiveReports()));
 
         //add layer for active reports
         this.map.addLayer({
@@ -114,9 +113,9 @@ export class MapComponent implements OnInit {
 
         if (activeReportsFeature) {
             this.map.setLayerProperty('activeReports', 'visibility', 'none');
-            this.activeReportsSource.setData(new FeatureCollection(this.getReportLocations(activeReportsFeature.reportId)));
+            this.reportLocationsSource.setData(new FeatureCollection(this.getReportLocations(activeReportsFeature.ReportID)));
             reportLocationsSetIntervalId = setInterval(() => {
-                this.activeReportsSource.setData(new FeatureCollection(this.getReportLocations(activeReportsFeature.reportId)));
+                this.reportLocationsSource.setData(new FeatureCollection(this.getReportLocations(activeReportsFeature.ReportID)));
             }, 10000);            
         } else {
             this.map.setLayerProperty('reportLocations', 'visibility', 'none');
@@ -129,8 +128,8 @@ export class MapComponent implements OnInit {
         let arrGeo: Array<GeoJson> = [];
 
         this.http.get(this.baseUrl + 'api/Admin/ActiveReports').subscribe(response => {
-            JSON.parse(response.json()).forEach(geoJson => {
-                arrGeo.push(new GeoJson([geoJson['Longitude'], geoJson['Latitude']]));
+            JSON.parse(response.json().data).forEach(geoJson => {
+                arrGeo.push(new GeoJson([geoJson['Longitude'], geoJson['Latitude']], geoJson['ReportID']));
             });
         });
 
@@ -141,7 +140,7 @@ export class MapComponent implements OnInit {
         let arrGeo: Array<GeoJson> = [];
 
         this.http.get(this.baseUrl + 'api/Admin/ReportLocations/' + reportId).subscribe(response => {
-            JSON.parse(response.json()).forEach(geoJson => {
+            JSON.parse(response.json().data).forEach(geoJson => {
                 arrGeo.push(new GeoJson([geoJson['Longitude'], geoJson['Latitude']]));
             });
         });

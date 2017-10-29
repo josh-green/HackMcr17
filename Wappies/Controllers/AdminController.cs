@@ -31,7 +31,7 @@ namespace Wappies.Controllers
 
             foreach (Report rep in Reports) {
                 Location location = rep.Locations.OrderByDescending(l => l.DateTime).FirstOrDefault();
-                GeoJson geo = new GeoJson(location.Latitude, location.Longitude, location.DateTime.ToLongDateString());
+                GeoJson geo = new GeoJson(location.Latitude, location.Longitude, location.DateTime.ToLongDateString(), location.ReportID);
                 Result.Add(geo);
             }
             return Json(Result);
@@ -46,7 +46,7 @@ namespace Wappies.Controllers
 
             foreach (Location location in Report.Locations)
             {
-                GeoJson geo = new GeoJson(location.Latitude, location.Longitude, location.DateTime.ToLongDateString());
+                GeoJson geo = new GeoJson(location.Latitude, location.Longitude, location.DateTime.ToLongDateString(), location.ReportID);
                 Result.Add(geo);
             }
             return Json(Result);
