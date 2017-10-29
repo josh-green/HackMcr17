@@ -42,7 +42,7 @@ export class MapComponent implements OnInit {
 
         this.map.on('load', this.onLoadMap.bind(this));
 
-        this.map.on('click', this.onClickMap.bind(this, event))
+        this.map.on('click', this.onClickMap.bind(this));
     }
 
     private onLoadMap() {
@@ -112,14 +112,14 @@ export class MapComponent implements OnInit {
             reportLocationsSetIntervalId;
 
         if (activeReportsFeature) {
-            this.map.setLayerProperty('activeReports', 'visibility', 'none');
+            this.map.setLayoutProperty('activeReports', 'visibility', 'none');
             this.reportLocationsSource.setData(new FeatureCollection(this.getReportLocations(activeReportsFeature.ReportID)));
             reportLocationsSetIntervalId = setInterval(() => {
                 this.reportLocationsSource.setData(new FeatureCollection(this.getReportLocations(activeReportsFeature.ReportID)));
             }, 10000);            
         } else {
-            this.map.setLayerProperty('reportLocations', 'visibility', 'none');
-            this.map.setLayerProperty('activeReports', 'visibility', 'visible');
+            this.map.setLayoutProperty('reportLocations', 'visibility', 'none');
+            this.map.setLayoutProperty('activeReports', 'visibility', 'visible');
             clearInterval(reportLocationsSetIntervalId);
         }
     }
@@ -128,7 +128,7 @@ export class MapComponent implements OnInit {
         let arrGeo: Array<GeoJson> = [];
 
         this.http.get(this.baseUrl + 'api/Admin/ActiveReports').subscribe(response => {
-            JSON.parse(response.json().data).forEach(geoJson => {
+            response.json().forEach(geoJson => {
                 arrGeo.push(new GeoJson([geoJson['Longitude'], geoJson['Latitude']], geoJson['ReportID']));
             });
         });
@@ -140,7 +140,7 @@ export class MapComponent implements OnInit {
         let arrGeo: Array<GeoJson> = [];
 
         this.http.get(this.baseUrl + 'api/Admin/ReportLocations/' + reportId).subscribe(response => {
-            JSON.parse(response.json().data).forEach(geoJson => {
+            response.json().forEach(geoJson => {
                 arrGeo.push(new GeoJson([geoJson['Longitude'], geoJson['Latitude']]));
             });
         });
