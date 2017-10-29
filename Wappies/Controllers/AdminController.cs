@@ -67,5 +67,42 @@ namespace Wappies.Controllers
             Result result = new Result(200, "Success");
             return Json(result);
         }
+
+        [HttpGet("[action]")]
+        public JsonResult GetMessages(GetMessageObj getMessageObj)
+        {
+            //Default the number of message returned to 100
+            int NumberOfMessages = !getMessageObj.NumberOfMessages.HasValue ? 100 : getMessageObj.NumberOfMessages.Value;
+
+            var messages = _context.Messages;
+
+            if (getMessageObj.ReportID.HasValue) {
+                messages.Where(m => m.ReportID == getMessageObj.ReportID.Value);
+            }
+
+            List<GetMessageResult> result = messages                
+                .Take(NumberOfMessages)
+                .Select(m => new GetMessageResult()
+                {
+                    ReportID = m.ReportID,
+                    MessageText = m.Text,
+                    DateTime = m.DateTime
+                })
+                .OrderByDescending(m => m.DateTime)
+                .ToList();
+
+            return Json(result);
+        }
+
+        public class GetMessageObj {
+            public int? ReportID;
+            public int? NumberOfMessages;
+        }
+
+        public class GetMessageResult {
+            public int ReportID;
+            public string MessageText;
+            public DateTime DateTime;
+        }
     }
 }

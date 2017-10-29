@@ -76,6 +76,20 @@ namespace Wappies.Controllers
             return Json(result);
         }
 
+        [HttpPost("[action]")]
+        public JsonResult CreateMessage(MessageObj messageObj)
+        {
+            Message message = new Message();
+            message.ReportID = messageObj.ReportID;
+            message.Text = messageObj.MessageText;
+            message.DateTime = DateTime.Now;
+            _context.Messages.Add(message);
+            _context.SaveChanges();
+
+            ReportResult result = new ReportResult(200, "Success", message.ReportID);
+            return Json(result);
+        }
+
         public class ReportResult {
             public int Code;
             public String Message;
@@ -88,11 +102,21 @@ namespace Wappies.Controllers
             }
         }
 
+        public class MessageResult {
+            public string MessageText;
+            public DateTime DateTime;
+        }
+
         public class ReportObj
         {
             public string Longitude;
             public string Latitude;
             public int ReportID;
+        }
+
+        public class MessageObj {
+            public int ReportID;
+            public string MessageText;
         }
     }
 }
