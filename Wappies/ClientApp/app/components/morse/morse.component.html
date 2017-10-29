@@ -1,4 +1,6 @@
-<div id='morse-detector' (mousedown)="startMorse()" (mouseup)="endMorse()" clickable>
+<div id='morse-detector'>
+    <canvas *ngIf='!mobile' id='mouse-canvas' (mousedown)="startMorse()" (mouseup)="endMorse()" clickable></canvas>
+    <canvas *ngIf='mobile' id='mobile-canvas' (touchstart)="startMorse()" (touchend)="endMorse()" clickable></canvas>
     <div id='clock-hours' class='clock-part'>{{ hours | twoDigits }}</div>
     <div id='clock-colon' class='clock-part'><span [class.hidden]='!showColon'>:</span></div>
     <div id='clock-minutes' class='clock-part'>{{ minutes | twoDigits }}</div>
