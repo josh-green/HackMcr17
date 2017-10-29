@@ -56,7 +56,7 @@ export class MapComponent implements OnInit {
 
         // get source
         this.activeReportsSource = this.map.getSource('activeReports');
-        //this.activeReportsSource.setData(new FeatureCollection(this.getActiveReports()));
+        this.activeReportsSource.setData(new FeatureCollection(this.getActiveReports()));
 
         //add layer for active reports
         this.map.addLayer({
