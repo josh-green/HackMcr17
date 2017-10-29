@@ -12,6 +12,7 @@ export class MorseComponent implements OnInit {
     private CHAR_BREAK: string = ' ';
     private WORD_BREAK: string = '/';
     private ITS_GO_TIME_WORD: string = 'SOS';
+    private ITS_NO_TIME_WORD: string = 'END';
 
     private CLEAR_TIME: number = 5000;
     private SPACE_TIME: number = 300;
@@ -61,6 +62,8 @@ export class MorseComponent implements OnInit {
             this.translatedText = this.morse.decode(this.morseText);
             if (this.translatedText.trim().slice(-this.ITS_GO_TIME_WORD.length).toUpperCase() === this.ITS_GO_TIME_WORD.toUpperCase()) {
                 this.beginTransmission();
+            } else if (this.translatedText.trim().slice(-this.ITS_NO_TIME_WORD.length).toUpperCase() === this.ITS_NO_TIME_WORD.toUpperCase()) {
+                this.ceaseTransmission();
             }
         }, this.SPACE_TIME);
 
@@ -74,6 +77,12 @@ export class MorseComponent implements OnInit {
         //TODO: This
         this.locationStuffEnabled = true;
         console.log('%cLET\'S GO', 'color: red; font-size: 216pt; text-align: center;');
+    }
+
+    public ceaseTransmission() {
+        //TODO: This too
+        this.locationStuffEnabled = false;
+        console.log('%cLET\'S NO', 'color: red; font-size: 216pt; text-align: center;');
     }
 
     public ngOnInit() {
