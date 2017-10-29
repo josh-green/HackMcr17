@@ -12,6 +12,7 @@ import { CounterComponent } from './components/counter/counter.component';
 import { MapComponent } from './components/map/map.component';
 import { MorseComponent } from './components/morse/morse.component';
 import { TestLocationComponent } from './components/testLocation/testLocation.component';
+import { TwoDigitsPipe } from './pipes/two-digits.pipe';
 
 import { locationServiceProvider } from './services/location/location.service.provider';
 
@@ -24,7 +25,8 @@ import { locationServiceProvider } from './services/location/location.service.pr
         HomeComponent,
         MapComponent,
         MorseComponent,
-        TestLocationComponent
+        TestLocationComponent,
+        TwoDigitsPipe
     ],
     imports: [
         CommonModule,
