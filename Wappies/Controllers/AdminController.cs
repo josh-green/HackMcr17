@@ -34,7 +34,7 @@ namespace Wappies.Controllers
                 GeoJson geo = new GeoJson(location.Latitude, location.Longitude, location.DateTime.ToLongDateString());
                 Result.Add(geo);
             }
-            return Json(JsonConvert.SerializeObject(Result));
+            return Json(Result);
             
         }
 
@@ -49,7 +49,7 @@ namespace Wappies.Controllers
                 GeoJson geo = new GeoJson(location.Latitude, location.Longitude, location.DateTime.ToLongDateString());
                 Result.Add(geo);
             }
-            return Json(JsonConvert.SerializeObject(Result));
+            return Json(Result);
         }
 
         [HttpPost("[action]")]
@@ -59,7 +59,7 @@ namespace Wappies.Controllers
             _context.SaveChangesAsync();
 
             Result result = new Result(200, "Success");
-            return Json(JsonConvert.SerializeObject(result));
+            return Json(result);
         }
     }
 }

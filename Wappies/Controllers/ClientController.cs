@@ -32,7 +32,7 @@ namespace Wappies.Controllers
             _context.SaveChanges();
 
             ReportResult result = new ReportResult(200, "Success", report.ID);
-            return Json(JsonConvert.SerializeObject(result));
+            return Json(result);
         }
 
         [HttpPost]
@@ -55,7 +55,7 @@ namespace Wappies.Controllers
 
             result = new ReportResult(200, "Success", report.ID);
             
-            return Json(JsonConvert.SerializeObject(result));
+            return Json(result);
         }
 
         public class ReportResult {
