@@ -14,6 +14,7 @@ namespace Wappies.Context
         public DbSet<Administrator> Administrators { get; set; }
         public DbSet<Report> Reports { get; set; }
         public DbSet<Location> Locations { get; set; }
+        public DbSet<Message> Messages { get; set; }
 
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
         {

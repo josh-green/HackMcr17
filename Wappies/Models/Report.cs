@@ -14,6 +14,9 @@ namespace Wappies.Models
         public bool Completed { get; set; }
 
         public List<Location> Locations { get; set; }
+
         public DateTime Updated { get; set; }
+
+        public List<Message> Messages { get; set; }
     }
 }
