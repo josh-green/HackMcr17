@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Wappies.Models
 {
@@ -17,5 +14,6 @@ namespace Wappies.Models
         public bool Completed { get; set; }
 
         public List<Location> Locations { get; set; }
+        public DateTime Updated { get; set; }
     }
 }

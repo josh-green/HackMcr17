@@ -26,30 +26,36 @@ namespace Wappies.Controllers
 
         [HttpGet("[action]")]
         public JsonResult ActiveReports() {
-            List<GeoJson> Result = new List<GeoJson>();
-            List<Report> Reports = _context.Reports.Include(r=>r.Locations).Where(r => r.Completed != true).ToList();
+            List<GeoJson> result = new List<GeoJson>();
+            List<Report> reports = _context.Reports
+                .Include(r=>r.Locations)
+                .Where(r => r.Completed != true && r.Locations != null)
+                .ToList();
 
-            foreach (Report rep in Reports) {
+            foreach (Report rep in reports) {
                 Location location = rep.Locations.OrderByDescending(l => l.DateTime).FirstOrDefault();
                 GeoJson geo = new GeoJson(location.Latitude, location.Longitude, location.DateTime.ToLongDateString(), location.ReportID);
-                Result.Add(geo);
+                result.Add(geo);
             }
-            return Json(Result);
+            return Json(result);
             
         }
 
         [HttpGet("[action]/{reportID}")]
         public JsonResult ReportLocations(int reportID)
         {
-            List<GeoJson> Result = new List<GeoJson>();
-            Report Report = _context.Reports.Include(r => r.Locations).Where(r => r.ID == reportID).FirstOrDefault();
+            List<GeoJson> result = new List<GeoJson>();
+            Report report = _context.Reports
+                .Include(r => r.Locations)
+                .Where(r => r.ID == reportID && r.Locations != null)
+                .FirstOrDefault();
 
-            foreach (Location location in Report.Locations)
+            foreach (Location location in report.Locations)
             {
                 GeoJson geo = new GeoJson(location.Latitude, location.Longitude, location.DateTime.ToLongDateString(), location.ReportID);
-                Result.Add(geo);
+                result.Add(geo);
             }
-            return Json(Result);
+            return Json(result);
         }
 
         [HttpPost("[action]")]

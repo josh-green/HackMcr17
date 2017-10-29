@@ -7,39 +7,19 @@
                 <span class='icon-bar'></span>
                 <span class='icon-bar'></span>
             </button>
-            <a class='navbar-brand' [routerLink]="['/home']">Wappies</a>
+            <a class='navbar-brand' [routerLink]="['/morse']">Wappies</a>
         </div>
         <div class='clearfix'></div>
         <div class='navbar-collapse collapse'>
             <ul class='nav navbar-nav'>
-                <li [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['/home']">
-                        <span class='glyphicon glyphicon-home'></span> Home
-                    </a>
-                </li>
-                <li [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['/counter']">
-                        <span class='glyphicon glyphicon-education'></span> Counter
-                    </a>
-                </li>
-                <li [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['/fetch-data']">
-                        <span class='glyphicon glyphicon-th-list'></span> Fetch data
-                    </a>
-                </li>
-                <li [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['/map']">
-                        <span class='glyphicon glyphicon-map-marker'></span> Map
-                    </a>
-                </li>
                 <li [routerLinkActive]="['link-active']">
                     <a [routerLink]="['/morse']">
                         <span class='glyphicon glyphicon-option-horizontal'></span> Morse
                     </a>
                 </li>
                 <li [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['/testLocation']">
-                        <span class='glyphicon glyphicon-briefcase'></span> Test Location
+                    <a [routerLink]="['/map']">
+                        <span class='glyphicon glyphicon-map-marker'></span> Map
                     </a>
                 </li>
             </ul>
